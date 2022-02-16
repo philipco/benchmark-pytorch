@@ -20,6 +20,8 @@ from PathDataset import get_path_to_datasets
 
 from pympler import asizeof
 
+from Timer import Timer
+
 NB_EPOCH = 10
 LEARNING_RATE = 0.1
 MOMENTUM = 0.9
@@ -31,6 +33,9 @@ class Training:
     def __init__(self, network, train_loader, test_loader) -> None:
         super().__init__()
         self.seed_everything()
+
+        timer = Timer()
+        timer.start()
 
         ############## Logs file ##############
         self.logs_file = "logs.txt"
@@ -58,12 +63,14 @@ class Training:
 
         ############## Class that stores all train/test losses and the test accuracies ##############
         self.run = DeepLearningRun()
+        timer.stop()
 
         with open(self.logs_file, 'a') as f:
             print(f"=========== NEW RUN ===========", file=f)
             print("Device :", self.device, file=f)
             print("Size of the global model: {:.2e} bits".format(asizeof.asizeof(self.global_model)), file=f)
             print("Size of the optimizer: {:.2e} bits".format(asizeof.asizeof(self.optimizer)), file=f)
+            print("Time of initialization: {:.2e}s".format(timer.time), file=f)
 
     def seed_everything(self):
         # Seed
@@ -135,6 +142,8 @@ class Training:
 
 if __name__ == '__main__':
 
+    timer = Timer()
+    timer.start()
     normalize = transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
     transform_train = transforms.Compose([
         transforms.RandomHorizontalFlip(),
@@ -161,8 +170,13 @@ if __name__ == '__main__':
                                            download=True, transform=transform_test)
     testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, pin_memory=True,
                                              shuffle=False, num_workers=4)
+    timer.stop()
+
 
     trainer = Training(LeNet, train_loader, testloader)
+
+    with open(trainer.logs_file, 'a') as f:
+        print("Time loading datasets: {:.2e}s".format(timer.time), file=f)
 
     train_losses = []
     test_losses = []
