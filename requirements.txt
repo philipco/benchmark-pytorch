@@ -1,0 +1,5 @@
+# To install use: pip install -c conda-forge -r requirements.txt
+pytorch
+torchvision
+pympler
+matplotlib
