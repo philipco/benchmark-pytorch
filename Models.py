@@ -7,7 +7,9 @@ import torch.nn.functional as F
 
 
 class LeNet(nn.Module):
-    """From https://github.com/kuangliu/pytorch-cifar/blob/master/models/lenet.py."""
+    """From https://github.com/kuangliu/pytorch-cifar/blob/master/models/lenet.py.
+
+    More example on: https://github.com/sushantkumar-estech/LeNet-CNN-for-CIFAR-10-Classification-Dataset/blob/master/LeNet_Convolutional_Neural_Network_for_CIFAR_10_Classification_Dataset.ipynb"""
     def __init__(self):
         super(LeNet, self).__init__()
         self.output_size = 10
@@ -17,11 +19,10 @@ class LeNet(nn.Module):
         self.fc1 = nn.Linear(16*5*5, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, self.output_size)
-        self.tanh = nn.Tanh()
         self.relu = nn.ReLU()
 
     def forward(self, x):
-        out = self.tanh(self.conv1(x))
+        out = self.relu(self.conv1(x))
         out = F.avg_pool2d(out, 2)
         out = self.relu(self.conv2(out))
         out = F.avg_pool2d(out, 2)

@@ -8,9 +8,10 @@ from matplotlib import pyplot as plt
 class DeepLearningRunLogger:
     """Gathers all important information compute during a Deep Learning run."""
 
-    def __init__(self) -> None:
+    def __init__(self, id: str) -> None:
         super().__init__()
         # self.parameters = parameters
+        self.id = id
         self.train_losses = []
         self.test_losses = []
         self.test_accuracies = []
@@ -27,7 +28,11 @@ class DeepLearningRunLogger:
         self.__plot__(self.train_losses, axes[0], yaxis="Train loss")
         self.__plot__(self.test_accuracies, axes[1], yaxis="Test accuracy")
         axes[0].set_xlabel(r"epoch", fontsize=15)
-        plt.show()
+        if self.id:
+            plt.savefig('{0}.eps'.format("./pictures/" + self.id), format='eps')
+            plt.close()
+        else:
+            plt.show()
 
     def __plot__(self, values, ax, yaxis):
         ax.plot(values)

@@ -16,7 +16,7 @@ if __name__ == '__main__':
     train_loader, testloader, time_data_loading = dataset.get_loaders()
 
     ### Intialization of the trainer
-    trainer = Training(LeNet, train_loader, testloader)
+    trainer = Training(LeNet, train_loader, testloader, id="cifar10")
 
     with open(trainer.logs_file, 'a') as f:
         print("Time loading datasets: {:.2e}s".format(time_data_loading), file=f)

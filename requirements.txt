@@ -1,5 +1,5 @@
 # To install use: pip install -c conda-forge -r requirements.txt
-pytorch
+pytorch-gpu # To allow run on a gpu
 torchvision
 pympler
 matplotlib

@@ -21,9 +21,10 @@ MOMENTUM = 0.9
 
 class Training:
 
-    def __init__(self, network, train_loader, test_loader) -> None:
+    def __init__(self, network, train_loader, test_loader, id: str) -> None:
         super().__init__()
         self.seed_everything()
+        self.id = id
 
         self.timer = Timer()
         self.timer.start()
@@ -53,12 +54,12 @@ class Training:
         self.criterion = nn.CrossEntropyLoss().to(self.device)
 
         ############## Class that stores all train/test losses and the test accuracies ##############
-        self.run_logger = DeepLearningRunLogger()
+        self.run_logger = DeepLearningRunLogger(id = self.id)
         self.timer.stop()
 
         with open(self.logs_file, 'a') as f:
-            print(f"=========================== NEW RUN " + datetime.now().strftime("%d/%m/%Y at %H:%M:%S") +
-                  " ===========================", file=f)
+            print(f"============================= NEW RUN " + datetime.now().strftime("%d/%m/%Y at %H:%M:%S") +
+                  " =============================", file=f)
             print("Device :", self.device, file=f)
             print("Size of the global model: {:.2e} bits".format(asizeof.asizeof(self.global_model)), file=f)
             print("Size of the optimizer: {:.2e} bits".format(asizeof.asizeof(self.optimizer)), file=f)
@@ -138,6 +139,7 @@ class Training:
         with torch.no_grad():
             for data in self.test_loader:
                 data, target = data
+                data, target = data.to(self.device), target.to(self.device)
 
                 ### Calculate the output
                 output = self.global_model(data)
