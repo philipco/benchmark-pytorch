@@ -32,6 +32,8 @@ class Dataset:
                                        download=True, transform=transform_train)
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=self.batch_size, pin_memory=pin_memory,
                                                    shuffle=True, num_workers=4)
+        full_train_loader = torch.utils.data.DataLoader(train_set, batch_size=6000, pin_memory=pin_memory,
+                                                   shuffle=True, num_workers=4)
 
         ### Get test loader
         test_set = self.dataset_class(root=get_path_to_datasets() + './dataset', train=False,
@@ -39,7 +41,7 @@ class Dataset:
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=self.batch_size, pin_memory=pin_memory,
                                                   shuffle=False, num_workers=4)
         timer.stop()
-        return train_loader, test_loader, timer.time
+        return train_loader, full_train_loader, test_loader, timer.time
 
     def __get_dataset_class__(self):
         """Get the class of the given dataset to later load it."""

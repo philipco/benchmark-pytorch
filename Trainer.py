@@ -21,7 +21,7 @@ MOMENTUM = 0.9
 
 class Training:
 
-    def __init__(self, network, train_loader, test_loader, id: str) -> None:
+    def __init__(self, network, train_loader, full_train_loader, test_loader, id: str) -> None:
         super().__init__()
         self.seed_everything()
         self.id = id
@@ -35,6 +35,8 @@ class Training:
         ############## Train/Test dataset loader ##############
         self.train_loader = train_loader
         self.test_loader = test_loader
+
+        self.full_train_loader = full_train_loader
 
         ############## Device: GPU or CPU ##############
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -80,11 +82,20 @@ class Training:
         self.run_logger.update_run(train_loss, test_loss, test_acc)
 
     def run_training(self):
+
+        ### Initialization of the loss/accuracy
+        train_loss = self.__compute_train_loss__()
+        test_loss, test_accuracy = self.__compute_test_accuracy_and_loss__()
+        self.__update_run__(train_loss, test_loss, test_accuracy)
+
         for epoch in range(NB_EPOCH):
             self.timer.start()
 
             ### Updating the model and computing the train loss
-            train_loss = self.__run_one_epoch__()
+            self.__run_one_epoch__()
+
+            ### Computing the train loss on the full dataset with the new model
+            train_loss = self.__compute_train_loss__()
 
             ### Computing the test loss/accuracy
             test_loss, test_accuracy = self.__compute_test_accuracy_and_loss__()
@@ -129,7 +140,23 @@ class Training:
             ### Update running loss
             running_loss += loss.item()
 
-        return running_loss / nb_inner_iterations
+    def __compute_train_loss__(self) -> (int, int):
+        """Compute train loss on the full dataset using a batcof size 6000."""
+        train_loss = 0.0
+        with torch.no_grad():
+            for data in self.full_train_loader:
+                data, target = data
+                data, target = data.to(self.device), target.to(self.device)
+
+                ### Calculate the output
+                output = self.global_model(data)
+
+                ### Computing the test loss
+                loss = self.criterion(output, target)
+                train_loss += loss.item()
+
+        train_loss = train_loss / len(self.full_train_loader)
+        return train_loss
 
     def __compute_test_accuracy_and_loss__(self) -> (int, int):
         """Compute test loss/accuracy."""
