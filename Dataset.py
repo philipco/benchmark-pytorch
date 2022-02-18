@@ -27,19 +27,21 @@ class Dataset:
         ### Get train/test transformers to preprocess data
         transform_train, transform_test = self.__data_transfomer__()
 
+        num_workers = 1 # Suggested max number of worker in my GPU's system is 1
+
         ### Get train loader
         train_set = self.dataset_class(root=get_path_to_datasets() + '/dataset', train=True,
                                        download=True, transform=transform_train)
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=self.batch_size, pin_memory=pin_memory,
-                                                   shuffle=True, num_workers=4)
+                                                   shuffle=True, num_workers=num_workers)
         full_train_loader = torch.utils.data.DataLoader(train_set, batch_size=6000, pin_memory=pin_memory,
-                                                   shuffle=True, num_workers=4)
+                                                   shuffle=True, num_workers=num_workers)
 
         ### Get test loader
         test_set = self.dataset_class(root=get_path_to_datasets() + './dataset', train=False,
                                       download=True, transform=transform_test)
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=self.batch_size, pin_memory=pin_memory,
-                                                  shuffle=False, num_workers=4)
+                                                  shuffle=False, num_workers=num_workers)
         timer.stop()
         return train_loader, full_train_loader, test_loader, timer.time
 

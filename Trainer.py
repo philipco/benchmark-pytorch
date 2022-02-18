@@ -16,7 +16,7 @@ from Timer import Timer
 from DeepLearningRunLogger import DeepLearningRunLogger
 
 NB_EPOCH = 100
-LEARNING_RATE = 0.1
+LEARNING_RATE = 0.01
 MOMENTUM = 0.9
 
 class Training:
@@ -62,6 +62,8 @@ class Training:
         with open(self.logs_file, 'a') as f:
             print(f"============================= NEW RUN " + datetime.now().strftime("%d/%m/%Y at %H:%M:%S") +
                   " =============================", file=f)
+            print("learning_rate -> {0}, momentum -> {1}, model -> {2}"
+                  .format(LEARNING_RATE, MOMENTUM, type(self.global_model).__name__), file=f)
             print("Device :", self.device, file=f)
             print("Size of the global model: {:.2e} bits".format(asizeof.asizeof(self.global_model)), file=f)
             print("Size of the optimizer: {:.2e} bits".format(asizeof.asizeof(self.optimizer)), file=f)
