@@ -12,7 +12,7 @@ import torch.optim as optim
 from pympler import asizeof
 from torch.backends import cudnn
 
-from Timer import Timer
+from src.Timer import Timer
 from src.DeepLearningRunLogger import DeepLearningRunLogger
 
 NB_EPOCH = 100

@@ -7,7 +7,7 @@ from src.Dataset import Dataset
 from src.models.DenseNet import DenseNet
 from src.models.LeNet import LeNet
 
-from Trainer import Training
+from src.Trainer import Training
 from src.models.Resnet import Resnet20
 from src.models.VGG import VGG11
 

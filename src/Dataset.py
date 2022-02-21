@@ -5,8 +5,8 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 
-from PathDataset import get_path_to_datasets
-from Timer import Timer
+from src.PathDataset import get_path_to_datasets
+from src.Timer import Timer
 
 
 class Dataset:
