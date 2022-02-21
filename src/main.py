@@ -1,14 +1,15 @@
 """
 Created by Philippenko, 16th February 2022.
 """
-import torchvision.models as models
 from matplotlib import pyplot as plt
 
-from Dataset import Dataset
-# from Models import LeNet
-from Models import LeNet, SqueezeNet
+from src.Dataset import Dataset
+from src.models.DenseNet import DenseNet
+from src.models.LeNet import LeNet
 
 from Trainer import Training
+from src.models.Resnet import Resnet20
+from src.models.VGG import VGG11
 
 BATCH_SIZE = 128
 
@@ -50,10 +51,12 @@ def __plot__(values, ax, yaxis, label):
 
 if __name__ == '__main__':
 
-    LeNet2 = run_training(LeNet)
-    LeNet1 = run_training(LeNet)
+    res_densenet = run_training(DenseNet)
+    res_resnet20 = run_training(Resnet20)
+    res_vgg11 = run_training(VGG11)
+    res_lenet = run_training(LeNet)
 
-    plot(LeNet1, LeNet2)
+    plot(res_densenet, res_resnet20, res_vgg11, res_lenet)
 
 
 

@@ -13,7 +13,7 @@ from pympler import asizeof
 from torch.backends import cudnn
 
 from Timer import Timer
-from DeepLearningRunLogger import DeepLearningRunLogger
+from src.DeepLearningRunLogger import DeepLearningRunLogger
 
 NB_EPOCH = 100
 LEARNING_RATE = 0.01
